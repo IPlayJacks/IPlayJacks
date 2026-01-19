@@ -9,7 +9,7 @@ const supabase = createClient(
 export async function GET() {
   const { data, error } = await supabase
     .from("stories")
-    .select("id, created_at, title, body, outcome, game_type, stakes, anonymous_name")
+    .select("*")
     .eq("approved", true)
     .order("created_at", { ascending: false });
 
@@ -30,14 +30,13 @@ export async function POST(req: Request) {
   }
 
   const { error } = await supabase.from("stories").insert({
-    title,
-    body: story,
-    outcome,
-    game_type: gameType || null,
-    stakes: stakes || null,
-    anonymous_name: name || "Anonymous",
-    approved: true
-  });
+  title,
+  body: story,
+  outcome,
+  anonymous_name: name || "Anonymous",
+  approved: false,
+});
+
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
